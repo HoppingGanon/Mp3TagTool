@@ -166,13 +166,17 @@ function Show () {
         $sb.Append('ffmpeg.exe -hide_banner -i "').Append($item.FullPath).Append('" -codec copy') | Out-Null
 
         for ($i=0;$i -lt $item.Parent.Count; $i++) {
+            # メタデータを書き込む
             if ($tagSelList[$i].Name -ne 'None') {
                 $sb.Append(" -metadata $($tagSelList[$i].Name)=`"$($item.Parent[$i])`"") | Out-Null
             }
         }
+        # トラック番号
         if ($item.Number -ge 0) {
             $sb.Append(" -metadata track=`"$($item.Number)`"") | Out-Null
         }
+        # タイトル
+        $sb.Append(" -metadata title=`"$($item.Name)`"") | Out-Null
 
         $sb.Append(" -codec copy -y `"$($item.Directory)\\${tempFileName}`"") | Out-Null
 
